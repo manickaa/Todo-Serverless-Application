@@ -47,6 +47,23 @@ provider:
         - dynamodb:Query
       Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODO_TABLE}/index/${self:provider.environment.USER_INDEX}
 
+custom:
+  
+  topicName: todoTopic-${self:provider.stage}
+  documentation:
+    api:
+      info:
+        version: v1.0.0
+        title: Todo API
+        description: Serverless application for Todo-List
+    models:
+      - name: TodoRequest
+        contentType: application/json
+        schema: ${file(models/create-todo-request.json)}
+      - name: TodoUpdateRequest
+        contentType: application/json
+        schema: ${file(models/update-todo-request.json)}
+
 functions:
 
   Auth:
