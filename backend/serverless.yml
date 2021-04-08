@@ -20,7 +20,8 @@ provider:
   environment:
     TODO_TABLE: Todos-${self:provider.stage}
     IMAGES_S3_BUCKET: serverless-todos-s3-images-${self:provider.stage}
-    USER_INDEX: UserIdIndex 
+    USER_INDEX: UserIdIndex
+    SIGNED_URL_EXPIRATION: 300
   
   tracing:
     lambda: true
