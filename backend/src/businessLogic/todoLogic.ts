@@ -82,5 +82,20 @@ export async function deleteTodo(event: APIGatewayProxyEvent) {
     
 }
 
+export async function generateUploadUrl(event: APIGatewayProxyEvent) {
+    const todoS3BucketName = todoS3Access.getBucketName()
+    const urlExpiration = process.env.SIGNED_URL_EXPIRATION
+    const todoId = event.pathParameters.todoId
+
+    const createSignedURLRequest = {
+        Bucket: todoS3BucketName,
+        Key: todoId,
+        Expiration: urlExpiration
+    }
+
+    return todoS3Access.getPreSignedUploadURL(createSignedURLRequest)
+
+}
+
 
 
