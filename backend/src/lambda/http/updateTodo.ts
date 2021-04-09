@@ -17,7 +17,7 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
       headers: {
         'Access-Control-Allow-Origin': '*'
       },
-      body: `Cannot find todoItem with id: ${todoId}`
+      body: `Cannot find todoItem with id: ${todoId}. Id not found`
     }
   }
   
