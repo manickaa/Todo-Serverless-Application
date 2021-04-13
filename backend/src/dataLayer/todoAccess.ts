@@ -53,24 +53,27 @@ export class TodoAccess {
         return result.Item as TodoItem
     }
 
-    async updateTodo(updatedTodo:UpdateTodoRequest, todoId:string) {
-        await this.docClient.update({
+    async updateTodo(updatedTodo:UpdateTodoRequest, todoId:string, userId:string) {
+        console.log('Todoid in todoAccess', todoId)
+        const updatedItem = await this.docClient.update({
             TableName: this.todoTable,
             Key: {
-                'todoId':todoId
-            },
-            UpdateExpression: 'set #name = :n, #dueDate = :d, #done = :done',
-            ExpressionAttributeValues: {
-                ':n' : updatedTodo.name,
-                ':d' : updatedTodo.dueDate,
-                ':done' : updatedTodo.done
+                todoId,
+                userId
             },
             ExpressionAttributeNames: {
-                "#name" : "name",
-                "#dueDate": "dueDate",
-                "#done": "done"
-            }
+                "#N" : "name"
+            },
+            UpdateExpression: 'set #N=:todoName, dueDate=:dueDate, done=:done',
+            ExpressionAttributeValues: {
+                ':todoName' : updatedTodo.name,
+                ':dueDate' : updatedTodo.dueDate,
+                ':done' : updatedTodo.done
+            },
+            ReturnValues: "UPDATED_NEW"
+            
         }).promise()
+        return updatedItem
     }
 
     async deleteTodoById(todoId: string, userId:string) {
