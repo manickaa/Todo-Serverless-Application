@@ -14,7 +14,9 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
       headers: {
         'Access-Control-Allow-Origin': '*'
       },
-      body: `Cannot delete todoItem with id: ${todoId}. Id not found`
+      body: JSON.stringify({
+        error: `Cannot delete todoItem with id: ${todoId}. Id not found`
+      })
     }
   }
   return {
@@ -23,6 +25,6 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': true
     },
-    body: `Deleted item with id : ${todoId}`
+    body: JSON.stringify({message:`Deleted item with id : ${todoId}`})
   }
 }
