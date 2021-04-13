@@ -55,14 +55,16 @@ export async function updateTodo(event: APIGatewayProxyEvent, updateTodoRequest:
     const todoId = event.pathParameters.todoId
     const userId = getUserId(event)
 
+    console.log('User id in todo Logic', userId)
+    
     if(!(await todoAccess.getTodoById(todoId, userId))) {
         console.log('Unknown todo item')
         logger.error('Unknown todo item')
         return false
     }
 
-    await todoAccess.updateTodo(updateTodoRequest, todoId)
-
+    const result = await todoAccess.updateTodo(updateTodoRequest, todoId, userId)
+    console.log('After updating - Result', result)
     return true
 }
 
@@ -90,10 +92,10 @@ export async function generateUploadUrl(event: APIGatewayProxyEvent) {
     const createSignedURLRequest = {
         Bucket: todoS3BucketName,
         Key: todoId,
-        Expiration: urlExpiration
+        Expires: urlExpiration
     }
 
-    return todoS3Access.getPreSignedUploadURL(createSignedURLRequest)
+    return await todoS3Access.getPreSignedUploadURL(createSignedURLRequest)
 
 }
 
