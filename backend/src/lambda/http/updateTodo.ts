@@ -5,16 +5,27 @@ import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } f
 import { UpdateTodoRequest } from '../../requests/UpdateTodoRequest'
 import { updateTodo } from '../../businessLogic/todoLogic'
 
+import {createLogger} from '../../utils/logger'
+
+const logger = createLogger('Update Todo')
+
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  const todoId = event.pathParameters.todoId
-  console.log('Todo id: ', todoId)
-  const updatedTodo: UpdateTodoRequest = JSON.parse(event.body)
-  console.log('Update request body', updatedTodo)
-  const updatedItem = await updateTodo(event, updatedTodo)
-  console.log('Updated item...', updatedItem)
+  
   // TODO: Update a TODO item with the provided id using values in the "updatedTodo" object
+  logger.info(`Processing Update Todo event - ${event}`)
+  
+  const todoId = event.pathParameters.todoId
+
+  const updatedTodo: UpdateTodoRequest = JSON.parse(event.body)
+  
+  logger.info('UpdateTodo request body', updatedTodo)
+  
+  const updatedItem = await updateTodo(event, updatedTodo)
+  
+  logger.info('Updating item...')
   
   if(!updatedItem) {
+    logger.error(`Update item failed..Cannot find todoItem with id: ${todoId}`)
     return {
       statusCode: 404,
       headers: {
@@ -26,6 +37,8 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     }
   }
   
+  logger.info(`UpdateTodo item with id ${todoId} succeeded`)
+
   return {
     statusCode: 200,
     headers: {

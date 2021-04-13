@@ -15,7 +15,6 @@ export class TodoAccess {
     }
 
     async getUserTodos(userId:string): Promise<TodoItem[]> {
-        console.log('Getting all todos')
 
         const result = await this.docClient.query({
             TableName: this.todoTable,
@@ -40,7 +39,6 @@ export class TodoAccess {
     }
 
     async getTodoById(todoId:string, userId:string): Promise<TodoItem> {
-        console.log('Getting todos with id', todoId)
 
         const result = await this.docClient.get({
             TableName: this.todoTable,
@@ -54,7 +52,7 @@ export class TodoAccess {
     }
 
     async updateTodo(updatedTodo:UpdateTodoRequest, todoId:string, userId:string) {
-        console.log('Todoid in todoAccess', todoId)
+
         const updatedItem = await this.docClient.update({
             TableName: this.todoTable,
             Key: {

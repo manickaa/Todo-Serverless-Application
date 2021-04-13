@@ -5,11 +5,31 @@ import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } f
 import { CreateTodoRequest } from '../../requests/CreateTodoRequest'
 import {createTodo} from '../../businessLogic/todoLogic'
 
+import {createLogger} from '../../utils/logger'
+
+const logger = createLogger('Create Todo')
+
 export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+  
+  // TODO: Implement creating a new TODO item
+  logger.info(`Processing CreateTodo event - ${event}`)
+  
   const newTodo: CreateTodoRequest = JSON.parse(event.body)
 
+  if(!newTodo.name) {
+    logger.error('Name of a todo item cannot be empty')
+    return {
+      statusCode: 400,
+      body: JSON.stringify({
+        error: 'Name of todo item cannot be empty'
+      })
+    }
+  }
+  
+  logger.info('Creating item...')
   const newItem = await createTodo(event, newTodo)
-  // TODO: Implement creating a new TODO item
+  
+  logger.info('Created new todo item ', newItem)
   return {
     statusCode: 201,
     headers: {
