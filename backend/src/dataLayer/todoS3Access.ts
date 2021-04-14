@@ -8,6 +8,7 @@ const XAWS = AWSXRay.captureAWS(AWS)
 // # References
 
 // https://github.com/vturbin/Serverless-Project
+// https://github.com/mu-majid/serverless-todo-app
 export class TodoS3Access {
     constructor(
         private readonly todoS3BucketName = process.env.IMAGES_S3_BUCKET,
