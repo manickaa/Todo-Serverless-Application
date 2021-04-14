@@ -18,7 +18,7 @@ const logger = createLogger('Todo BusinessLogic Execution')
 
 export async function createTodo(event: APIGatewayProxyEvent, createTodoRequest: CreateTodoRequest) : Promise<TodoItem> {
     
-    logger.info('Executing logic for createTodo request ', createTodoRequest)
+    logger.info(`Executing logic for createTodo request ${createTodoRequest}`)
     const newTodoId = uuid.v4()
     const userId = getUserId(event)
     const createdAt = new Date().toISOString()
@@ -40,7 +40,7 @@ export async function createTodo(event: APIGatewayProxyEvent, createTodoRequest:
 export async function getAllTodo(event: APIGatewayProxyEvent) : Promise<TodoItem[]> {
     
     const userId = getUserId(event)
-    logger.info('Executing logic to get all todo items for the user', userId)
+    logger.info(`Executing logic to get all todo items for the user ${userId}`)
     logger.info('Getting todoitems from dynamodb')
     return await todoAccess.getUserTodos(userId)
 
@@ -68,7 +68,7 @@ export async function updateTodo(event: APIGatewayProxyEvent, updateTodoRequest:
     }
     logger.info('Updating todoitem in dynamodb')
     const result = await todoAccess.updateTodo(updateTodoRequest, todoId, userId)
-    console.log('Updated item - ', result)
+    console.log(`Updated item ${JSON.stringify(result)}`)
     logger.info('Updated todoitem in dynamodb')
     return true
 }
@@ -93,7 +93,7 @@ export async function generateUploadUrl(event: APIGatewayProxyEvent) {
     const todoS3BucketName = todoS3Access.getBucketName()
     const urlExpiration = process.env.SIGNED_URL_EXPIRATION
     const todoId = event.pathParameters.todoId
-    logger.info('Getting Upload URL for todo item, ', todoId)
+    logger.info(`Getting Upload URL for todo item ${todoId}`)
 
     const createSignedURLRequest = {
         Bucket: todoS3BucketName,
